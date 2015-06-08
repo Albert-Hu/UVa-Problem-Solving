@@ -1,58 +1,82 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
+   final static int MAX = 1000001;
    public static void main(String argv[]) throws IOException {
+      int a, aa, b, bb;
+      int x, xx, y, yy, z, zz;
+      int[] used = new int[MAX];
+      int[] triple = new int[MAX];
+      int[] remain = new int[MAX];
       String line;
       BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-      while ((line = in.readLine()) != null) {
-         int a = 2;
-         int b = 1;
-         int n = Integer.parseInt(line);
-         int others = n;
-         int triples = 0;
-         boolean[] table = new boolean[1000001];
-         do {
-            while (((a * a) + (b * b)) <= n) {
-               int aa = a * a;
-               int bb = b * b;
-               int x = aa - bb;
-               int y = 2 * a * b;
-               int z = aa + bb;
-               if (gcd(x, y) == 1) ++triples;
-               if (!table[x]) {table[x] = true; --others;}
-               if (!table[y]) {table[y] = true; --others;}
-               if (!table[z]) {table[z] = true; --others;}
-               for (int i = 2; i * z <= n; i++) {
-                  int index = x * i;
-                  if (!table[index]) {table[index] = true; --others;}
-                  index = y * i;
-                  if (!table[index]) {table[index] = true; --others;}
-                  index = z * i;
-                  if (!table[index]) {table[index] = true; --others;}
+      Arrays.fill(used, Integer.MAX_VALUE);
+
+      a = 2;
+      aa = 4;
+      b = 1;
+      bb = 1;
+      x = 3;
+      y = 4;
+      z = 5;
+      while (z < MAX) {
+         while (z < MAX) {
+            if (gcd(a, b) == 1) {
+               ++triple[z];
+               xx = x;
+               yy = y;
+               zz = z;
+               while (zz < MAX) {
+                  if (used[xx] > zz) used[xx] = zz;
+                  if (used[yy] > zz) used[yy] = zz;
+                  if (used[zz] > zz) used[zz] = zz;
+                  xx += x;
+                  yy += y;
+                  zz += z;
                }
-               ++a;
             }
-            ++b;
-            a = b + 1;
-         } while ((a * a) + (b * b) <= n);
-         System.out.println(triples + " " + others);
+            a += 2;
+            aa = a * a;
+            x = aa - bb;
+            y = 2 * a * b;
+            z = aa + bb;
+         }
+         ++b;
+         a = b + 1;
+         aa = a * a;
+         bb = b * b;
+         x = aa - bb;
+         y = 2 * a * b;
+         z = aa + bb;
+      }
+
+      for (int i = 3; i < MAX; i++) {
+         if (used[i] < Integer.MAX_VALUE)
+            ++remain[used[i]];
+      }
+
+      for (int i = 3; i < MAX; i++) {
+         triple[i] += triple[i - 1];
+         remain[i] += remain[i - 1];
+      }
+
+      while ((line = in.readLine()) != null) {
+         int n = Integer.parseInt(line);
+         System.out.println(triple[n] + " " + (n - remain[n]));
       }
    }
 
-   public static int gcd(int a, int b) {
+   public static int gcd(int min, int max) {
       int tmp;
-      if (a < b) {
-         tmp = a;
-         a = b;
-         b = tmp;
-      }
-      while ((a % b) > 0) {
-         a %= b;
-         tmp = a;
-         a = b;
-         b = tmp;
-      }
-      return b;
+
+      do {
+         tmp = min;
+         min = max % min;
+         max = tmp;
+      } while (min > 0);
+
+      return max;
    }
 }
