@@ -3,33 +3,29 @@ import java.util.*;
 
 public class Main {
    public static void main(String args[]) throws IOException {
-      int count = 0;
-      int[] array = new int[10000];
       String line;
+      StringBuilder answer = new StringBuilder();
+      PriorityQueue<Integer> maxQueue = new PriorityQueue<Integer>(10);
+      PriorityQueue<Integer> minQueue = new PriorityQueue<Integer>(10, Collections.reverseOrder());
       BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
       while ((line = in.readLine()) != null) {
          int n = Integer.parseInt(line.trim());
-         int start, middle, end;
-         start = 0;
-         end = count;
-         while (start != end) {
-            middle = (end - start) / 2;
-            if (array[start + middle] < n) {
-               start = start + middle + 1;
-            } else {
-               end = start + middle;
-            }
+         maxQueue.add(n);
+         if ((maxQueue.size() - minQueue.size()) > 1) {
+            minQueue.add(maxQueue.poll());
          }
-         for (int i = count; i > start; i--)
-            array[i] = array[i - 1];
-         array[start] = n;
-         ++count;
-         if ((count % 2) == 1) {
-            System.out.println(array[count/2]);
+         if (minQueue.size() > 0 && maxQueue.peek() < minQueue.peek()) {
+            maxQueue.add(minQueue.poll());
+            minQueue.add(maxQueue.poll());
+         }
+         if (maxQueue.size() == minQueue.size()) {
+            answer.append(Integer.toString((maxQueue.peek() + minQueue.peek()) / 2));
          } else {
-            System.out.println(((array[count/2]+array[(count/2)-1])/2));
+            answer.append(Integer.toString(maxQueue.peek()));
          }
+         answer.append('\n');
       }
+      System.out.print(answer);
    }
 }
