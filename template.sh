@@ -13,7 +13,7 @@ cat > $1/main.c << C_TEMPLATE
 int main(int argc, char* argv[])
 {
 
-   return 0;
+	return 0;
 }
 C_TEMPLATE
 
@@ -21,9 +21,9 @@ cat > $1/Main.java << JAVA_TEMPLATE
 import java.io.*;
 
 public class Main {
-   public static void main(String args[]) throws IOException {
-      BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-   }
+	public static void main(String args[]) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	}
 }
 JAVA_TEMPLATE
 
