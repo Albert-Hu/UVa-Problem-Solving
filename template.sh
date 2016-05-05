@@ -27,4 +27,14 @@ public class Main {
 }
 JAVA_TEMPLATE
 
+cat > $1/main.py << PYTHON_TEMPLATE
+def main():
+	pass
+
+if __name__ == '__main__':
+	main()
+
+PYTHON_TEMPLATE
+
+
 fi
