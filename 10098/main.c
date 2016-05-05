@@ -27,7 +27,7 @@ void generate(char* string, int str_len, char* stack, int stack_len, char* used)
 
 int compare(const void* a, const void* b)
 {
-	return *(char*)a > *(char*)b;
+	return *(char*)a - *(char*)b;
 }
 
 int main(int argc, char* argv[])
